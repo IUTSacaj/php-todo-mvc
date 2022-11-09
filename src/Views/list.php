@@ -27,30 +27,64 @@ echo get_header( [ 'title' => 'Accueil' ] );
       <!-- /Header + Search Form -->
       
       <form method="post">
-        
-        <?php
+          <?php
+          $atmdate = "";
 
-            foreach ( $tasks as $task ) {
-                $date = $task->getCreatedAt();
-                if( $date == $predate){
-                    echo get_template( __PROJECT_ROOT__ . "/Views/fragments/task-card.php", [
-                        'task' => $task
-                    ] );
-                }
-                else if($date != null){
-                        ?>
-                    <h3> <?php echo date("d/m/Y", strtotime($date))?> </h3>
-                    <?php
-                    $predate = $date;
-                    echo get_template( __PROJECT_ROOT__ . "/Views/fragments/task-card.php", [
-                        'task' => $task
-                    ] );
-                }
-            }
+          $page = $_GET['page'] ?? 1;
 
-        ?>
-        
-        <!-- Pagination + Submit -->
+          switch ($page){
+
+              case 1:
+
+                  $page = 0;
+
+                  break;
+
+              case 2:
+
+                  $page = 10;
+
+                  break;
+
+              case 3:
+
+                  $page = 20;
+
+                  break;
+
+          }
+
+          $tasks = array_slice($tasks, $page, 10);
+
+          foreach ($tasks as $task){
+
+              $taskDate = date('d-m-Y', strtotime($task->getCreatedAt()));
+
+              if ($taskDate != $atmdate) {
+
+                  $atmdate = $taskDate;
+
+                  echo "<h2 class='text-xl font-bold uppercase tracking-widest flex-1 mt-8 mb-4'>$taskDate</h2>";
+
+              }
+
+              echo get_template( __PROJECT_ROOT__ . "/Views/fragments/task-card.php", [
+
+                  'task' => $task
+
+              ]);
+
+              if (isset($_GET['search'])){
+
+                  $search = $_GET['search'];
+
+              }
+
+          }
+
+          ?> 
+
+          <!-- Pagination + Submit -->
         <div class="flex flex-row justify-space-between items-center">
           <!-- Submit -->
           <button type="submit" class="p-4 rounded bg-teal-400 hover:bg-teal-500 duration-300 transition-colors flex items-center font-medium text-sm uppercase text-white tracking-widest justify-center">
@@ -59,13 +93,37 @@ echo get_header( [ 'title' => 'Accueil' ] );
           
           <!-- Pagination -->
           <div class="flex-1 flex flex-row justify-end space-x-4 my-8">
-            <a class="block bg-slate-50 hover:bg-slate-200 rounded p-4 text-sm cursor-pointer transition-colors duration-300">
+            <a class="block bg-slate-50 hover:bg-slate-200 rounded p-4 text-sm cursor-pointer transition-colors duration-300" href="<?php
+
+            $params=$_GET;
+
+            $params['page'] = 1;
+
+            echo "/?" .http_build_query($params);
+
+            ?>">
               1
             </a>
-            <a class="block bg-slate-50 hover:bg-slate-200 rounded p-4 text-sm cursor-pointer transition-colors duration-300">
+            <a class="block bg-slate-50 hover:bg-slate-200 rounded p-4 text-sm cursor-pointer transition-colors duration-300" href="<?php
+
+            $params=$_GET;
+
+            $params['page'] = 2;
+
+            echo "/?" .http_build_query($params);
+
+            ?>">
               2
             </a>
-            <a class="block bg-slate-50 hover:bg-slate-200 rounded p-4 text-sm cursor-pointer transition-colors duration-300">
+            <a class="block bg-slate-50 hover:bg-slate-200 rounded p-4 text-sm cursor-pointer transition-colors duration-300" <?php
+
+            $params=$_GET;
+
+            $params['page'] = 3;
+
+            echo "/?" .http_build_query($params);
+
+            ?>>
               3
             </a>
           </div>
