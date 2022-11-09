@@ -14,6 +14,8 @@ require_once __PROJECT_ROOT__ . "/Controllers/AbstractController.php";
 require_once __PROJECT_ROOT__ . "/Controllers/TaskSingleController.php";
 require_once __PROJECT_ROOT__ . "/Controllers/TaskListController.php";
 
+require_once __PROJECT_ROOT__ . "/Entities/TaskEntity.php";
+
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
 
