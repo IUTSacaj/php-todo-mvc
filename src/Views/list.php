@@ -82,7 +82,7 @@ echo get_header( [ 'title' => 'Accueil' ] );
 
           }
 
-          ?> 
+          ?>
 
           <!-- Pagination + Submit -->
         <div class="flex flex-row justify-space-between items-center">
